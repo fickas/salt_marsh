@@ -173,9 +173,7 @@ For each marsh, we report a stage-by-stage attrition table showing how many unhe
 
 ## 7. Results
 
-*[Draft paragraph — fill in with real values once per-marsh runs complete]*
-
-Across the 9 marshes, the cascade caught between **[min]%** and **[max]%** of unhealthy bank tiles (median **[X]%**). Precision on unhealthy-bank detection ranged from **[min]** to **[max]** (median **[Y]**). A field ecologist working from the model's outputs would examine roughly **[Z]** tiles per marsh instead of the full drone survey, without missing significant erosion sites.
+Results are broken out by stages with overall accuracy.
 
 | Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall Accuracy |
 |-------|:-----------:|:-----------------:|:--------------------:|:---:|:-----------------:|:--------------------:|:---:|
@@ -189,8 +187,6 @@ Across the 9 marshes, the cascade caught between **[min]%** and **[max]%** of un
 | *[Marsh 8]* | | | | | | | | | |
 | *[Marsh 9]* | | | | | | | | | |
 | **Median** | — | | | | | | | | |
-
-Test tiles counts all classes (healthy banks, unhealthy banks, non-banks). Per-marsh confusion matrices, thresholds, and attrition tables are in Appendix C.
 
 ---
 
