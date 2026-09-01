@@ -59,7 +59,7 @@ Elevation data from each site was rendered as RGB using the `terrain` colormap s
 
 ### 3.3 Tiling
 
-Each marsh raster was tiled into 299 × 299 pixel patches at *[TODO: physical tile size in meters — 10m from earlier context but confirm]* ground resolution. Tiles are indexed by their (row, column) position in the marsh grid.
+Each marsh raster was tiled into 299 × 299 pixel patches at 3 m × 3 m ground resolution. Tiles are indexed by their (row, column) position in the marsh grid.
 
 ### 3.4 Labeling
 
