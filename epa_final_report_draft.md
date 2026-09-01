@@ -178,15 +178,15 @@ Results are broken out by stages with overall accuracy.
 | Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall Accuracy |
 |-------|:-----------:|:-----------------:|:--------------------:|:---:|:-----------------:|:--------------------:|:---:|
 | *Old Town Hill* | 0.984 | 0.947 | 0.965  | 0.982 | 0.949 | 0.966 | .957 |
-| *[Marsh 2]* | | | | | | | | | |
-| *[Marsh 3]* | | | | | | | | | |
-| *[Marsh 4]* | | | | | | | | | |
-| *[Marsh 5]* | | | | | | | | | |
-| *[Marsh 6]* | | | | | | | | | |
-| *[Marsh 7]* | | | | | | | | | |
-| *[Marsh 8]* | | | | | | | | | |
-| *[Marsh 9]* | | | | | | | | | |
-| **Median** | — | | | | | | | | |
+| *North River* | .964 | .946 | .955 | .913 | .808 | .857 | .910 |
+| *South River* | .881 | .983 | .929 | .900| .750 | .818 | .930|
+| *Wellfleet* | .968 | 1.00| .984| .929| .867| .897| .945 |
+| *[Marsh 5]* | | | | | | | |
+| *[Marsh 6]* | | | | | | | |
+| *[Marsh 7]* | | | | | | | |
+| *[Marsh 8]* | | | | | | | |
+| *[Marsh 9]* | | | | | | | |
+| **Median** | — | | | | | | |
 
 ---
 
