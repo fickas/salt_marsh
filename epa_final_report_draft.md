@@ -177,9 +177,9 @@ For each marsh, we report a stage-by-stage attrition table showing how many unhe
 
 Across the 9 marshes, the cascade caught between **[min]%** and **[max]%** of unhealthy bank tiles (median **[X]%**). Precision on unhealthy-bank detection ranged from **[min]** to **[max]** (median **[Y]**). A field ecologist working from the model's outputs would examine roughly **[Z]** tiles per marsh instead of the full drone survey, without missing significant erosion sites.
 
-| Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall F1 |
+| Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall Accuracy |
 |-------|:-----------:|:-----------------:|:--------------------:|:---:|:-----------------:|:--------------------:|:---:|
-| *Old Town Hill* | 0.984 | 0.947 | 0.965  | | | | |
+| *Old Town Hill* | 0.984 | 0.947 | 0.965  | 0.982 | 0.949 | 0.966 | .96 |
 | *[Marsh 2]* | | | | | | | | | |
 | *[Marsh 3]* | | | | | | | | | |
 | *[Marsh 4]* | | | | | | | | | |
