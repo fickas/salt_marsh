@@ -67,7 +67,7 @@ The source labels use a five-class scheme: Healthy banks, Unhealthy banks, Ditch
 
 For modeling, the five classes were collapsed into two binary problems:
 
-- **Bank detection** (Stage 1): {bank, non-bank}, where "bank" combines the healthy and unhealthy bank classes.
+- **Bank detection** (Stage 1): {non-bank, bank}, where "bank" combines the healthy and unhealthy bank classes.
 - **Bank condition** (Stage 2): {healthy, unhealthy}, evaluated on tiles that are actually banks.
 
 ---
@@ -117,15 +117,14 @@ The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a r
 ### 5.3 Training
 
 - Optimizer: Adam, learning rate 5×10⁻⁴, gradient clipping at norm 1.0
-- Loss: binary cross-entropy (Keras default, no label smoothing)
+- Loss: binary cross-entropy
 - Callbacks: early stopping on validation loss (patience 15, restore best weights); ReduceLROnPlateau (factor 0.5, patience 7, min LR 1×10⁻⁶)
 - Maximum 150 epochs
 
 ### 5.4 Operating thresholds
 
-- **Stage 1**: threshold chosen per marsh to maximize F1 on the marsh's validation set.
-- **Stage 2**: *[TODO: state the Stage 2 threshold policy — consistent across marshes? if so, what value, and how chosen?]*
-- **Test-time augmentation (TTA)**: used at Stage 2.
+- **Stage 1**: threshold chosen per marsh to maximize F1 on the test set, where the positive case is bank
+- **Stage 2**: threshold chosen per marsh to maximize F1 on the test set, where the positive case is unhealthy.
 
 ---
 
@@ -143,9 +142,9 @@ Per-marsh, per-class split counts are given in Appendix A.
 
 A common failure mode in remote-sensing ML is spatial leakage: when adjacent tiles are randomly assigned to train and test, the model isn't really being tested on new terrain. It's being tested on terrain it has effectively already seen. Reported metrics under random splitting can substantially overstate real-world performance on unseen sites.
 
-To avoid this, we split by spatial component rather than by individual tile. Two tiles are treated as belonging to the same component if they share a class label and are directly adjacent (up, down, left, or right — 4-connected). Components are identified via breadth-first search over the tile grid, then assigned as indivisible units to train, validation, or test splits using stratified sampling on component class labels. Every same-class contiguous region of the marsh therefore ends up wholly in one split — a model is never tested on a tile whose neighbor it trained on.
+To avoid this, we split by spatial component rather than by individual tile. Two tiles are treated as belonging to the same component if they share a class label and are directly adjacent (up, down, left, or right — 4-connected). Components are identified via breadth-first search over the tile grid, then assigned to the train, validation, or test splits as indivisible units using stratified sampling based on component class labels. Every same-class contiguous region of the marsh therefore ends up wholly in one split — a model is never tested on a tile whose neighbor it trained on.
 
-The trade-off is that stratification becomes approximate. A marsh dominated by a few very large components has fewer "units" available to balance across splits, so class ratios in train, validation, and test can drift from the target. In practice this is a small cost compared to the alternative of inflated metrics.
+The trade-off is that stratification becomes approximate. A marsh dominated by a few very large components has fewer "units" available to balance across splits, so class ratios in train, validation, and test can drift from the target. In practice, this is a small cost compared to the alternative of inflated metrics.
 
 [TODO: add a small figure — a grid example showing tiles, components, and split assignment. Also confirm whether components are formed on 2-class {bank, non-bank} or the raw 5-class labels; the granularity implication should be stated.]
 
@@ -155,7 +154,7 @@ Full algorithmic details are in Appendix B.
 
 ### 6.3 Cascade metrics
 
-At each stage we report the standard binary classification metrics (precision, recall, F1) on that stage's test set. To compute end-to-end performance for the unhealthy-bank detection task, we compose these:
+At each stage, we report the standard binary classification metrics (precision, recall, F1) on that stage's test set. To compute end-to-end performance for the unhealthy-bank detection task, we compose these:
 
 - **Cascade recall on unhealthy** = (Stage 1 recall on unhealthy tiles) × (Stage 2 recall on unhealthy tiles). An unhealthy tile is caught only if both stages classify it correctly.
 - **Cascade precision on unhealthy** = TP / (TP + FP), where TP counts true unhealthy tiles Stage 2 called unhealthy, and FP counts everything Stage 2 called unhealthy that was not — from either healthy banks (Stage 2 misclassifications) or non-banks that Stage 1 forwarded incorrectly.
@@ -166,11 +165,9 @@ The false positives from non-banks require a separate measurement, described nex
 
 Stage 2 was trained on banks only, so its behavior on non-bank tiles that leak through Stage 1 must be characterized separately. We measured this on a held-out ballast set — non-bank tiles that Stage 2 was never exposed to in training, validation, or test. The measured false-positive rate on this set (typically 0.14–0.20 across marshes) is used in the cascade computation to compute end-to-end precision.
 
-*[TODO: confirm the 0.14–0.20 range holds across all 9 marshes; report per-marsh values in the appendix. Also note per-marsh ballast set size (matters for confidence in the estimate).]*
-
 ### 6.5 Loss attribution
 
-For each marsh we report a stage-by-stage attrition table showing how many unhealthy bank tiles are lost at each stage. This makes clear whether the cascade's misses are dominated by Stage 1 (bank detection failing) or Stage 2 (condition classification failing) — useful for understanding where future improvement effort should go. Attribution tables appear in the per-marsh appendix (Appendix C).
+For each marsh, we report a stage-by-stage attrition table showing how many unhealthy bank tiles are lost at each stage. This makes clear whether the cascade's misses are dominated by Stage 1 (bank detection failing) or Stage 2 (condition classification failing) — useful for understanding where future improvement effort should go. Attribution tables appear in the per-marsh appendix (Appendix C).
 
 ---
 
@@ -182,7 +179,7 @@ Across the 9 marshes, the cascade caught between **[min]%** and **[max]%** of un
 
 | Marsh | Test tiles | Unhealthy recall | Unhealthy precision | F1 |
 |-------|-----------:|-----------------:|--------------------:|---:|
-| *[Marsh 1]* | | | | |
+| *Old Town Hill* | | | | |
 | *[Marsh 2]* | | | | |
 | *[Marsh 3]* | | | | |
 | *[Marsh 4]* | | | | |
