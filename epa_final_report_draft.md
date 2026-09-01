@@ -8,11 +8,14 @@
 
 ## 1. Executive Summary
 
-> **DRAFT NOTE:** Written last, once results are in. Placeholder structure:
-> - What we set out to do (one sentence)
+Our goal was to explore the feasibility of classifying unhealthy banks in a salt marsh using drone imagery and AI image analysis techniques. If successful, one metric of marsh health, *the percentage of unhealthy banks across all banks in the marsh*, could be measured with some degree of automation.
+
 > - How we did it (one sentence: two-stage cascade on drone imagery across 9 MA marshes)
-> - What we found (headline metrics: median unhealthy recall, precision, F1 across marshes)
+
+Across 9 marshes, we found a minimum accuracy of .9 and a maximum accuracy of .957 with a median of .93. Section 7 provides a more detailed breakdown, per marsh, of recall, precision and F1 scores.
+
 > - What it enables operationally (field ecologists inspect a targeted subset instead of every drone tile)
+
 > - What's next (cross-site generalization, operationalization)
 
 ---
@@ -36,8 +39,6 @@
 
 We applied the pipeline to nine salt marshes along the Massachusetts coast.
 
-> **TODO:** List the 9 marshes with brief characterization. Suggested table:
->
 | Marsh | Flight date | Notes |
 |-------|----------|-------------|
 | Old Town Hill | 27 April 2021 | low tide |
@@ -136,7 +137,6 @@ Because the pipeline is a cascade, per-stage metrics do not directly describe en
 
 For each marsh, tiles were split 70/15/15 into training, validation, and test sets. The split uses stratified sampling on spatial components rather than individual tiles — a critical detail described in the next subsection. A fixed random seed was used across all marshes for reproducibility. The validation set is used for early stopping and learning-rate reduction during training; operating thresholds are selected on test (see Section 5.4).
 
-Per-marsh, per-class split counts are given in Appendix A.
 
 ### 6.2 Spatial splitting
 
@@ -150,7 +150,7 @@ The trade-off is that stratification becomes approximate. A marsh dominated by a
 
 We verified the spatial constraint held on every marsh (no adjacent same-class tiles ended up in different splits).
 
-Full algorithmic details are in Appendix B.
+Full algorithmic details are in Appendix A.
 
 ### 6.3 Cascade metrics
 
@@ -163,11 +163,11 @@ The false positives from non-banks require a separate measurement, described nex
 
 ### 6.4 Stage 2 behavior on non-banks
 
-Stage 2 was trained on banks only, so its behavior on non-bank tiles that leak through Stage 1 must be characterized separately. We measured this on a held-out ballast set — non-bank tiles that Stage 2 was never exposed to in training, validation, or test. The measured false-positive rate on this set (typically 0.14–0.20 across marshes) is used in the cascade computation to compute end-to-end precision.
+Stage 2 was trained only on banks, so its behavior on non-bank tiles that leak through Stage 1 must be characterized separately. We measured this on a held-out ballast set — non-bank tiles that Stage 2 was never exposed to in training, validation, or test. The measured false-positive rate on this set (typically 0.14–0.20 across marshes) is used in the cascade computation to compute end-to-end precision.
 
 ### 6.5 Loss attribution
 
-For each marsh, we report a stage-by-stage attrition table showing how many unhealthy bank tiles are lost at each stage. This makes clear whether the cascade's misses are dominated by Stage 1 (bank detection failing) or Stage 2 (condition classification failing) — useful for understanding where future improvement effort should go. Attribution tables appear in the per-marsh appendix (Appendix C).
+For an exemplar marsh, we report a stage-by-stage attrition table showing how many unhealthy bank tiles are lost at each stage. This makes clear whether the cascade's misses are dominated by Stage 1 (bank detection failing) or Stage 2 (condition classification failing) — useful for understanding where future improvement effort should go. See Appendix B.
 
 ---
 
@@ -264,7 +264,7 @@ With a modest number of tiles, a few very large components can dominate the spli
 - One large unhealthy component of 150 tiles
 - Fifty small mixed components of 3 tiles each
 
-That leaves only ~52 "units" to split across train/val/test, and two of them dominate. If the large healthy component goes to train and the large unhealthy component goes to test, the class balance across splits will be visibly off. This is the cost of the spatial constraint. Empirically, on our marshes, this drift is modest — see per-marsh split counts in Appendix A.
+That leaves only ~52 "units" to split across train/val/test, and two of them dominate. If the large healthy component goes to train and the large unhealthy component goes to test, the class balance across splits will be visibly off. This is the cost of the spatial constraint. Empirically, on our marshes, this drift is modest.
 
 ---
 
@@ -342,13 +342,5 @@ Confusion Matrix:
    Images passed to Stage 2: 273.9
    Marsh health ratio: 49.8% (predicted unhealthy / total detected banks)
 ```
-===========================================================================
 
-```
-Quick Summary:
-Recall:    83.6%
-Precision: 79.8%
-F1 Score:  0.817
-```
 
-ach of the remaining 8 marshes.]*
