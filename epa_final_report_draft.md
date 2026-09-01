@@ -39,7 +39,7 @@ We applied the pipeline to nine salt marshes along the Massachusetts coast.
 > **TODO:** List the 9 marshes with brief characterization. Suggested table:
 >
 | Marsh | Flight date | Notes |
-|-------|----------|-------------|-------|
+|-------|----------|-------------|
 | Old Town Hill | 27apr21 | low tide |
 | Old Town Hill | 27apr21 | low tide |
 | Old Town Hill | 27apr21 | low tide |
