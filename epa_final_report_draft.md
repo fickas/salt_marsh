@@ -123,8 +123,8 @@ The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a r
 
 ### 5.4 Operating thresholds
 
-- **Stage 1**: threshold chosen per marsh to maximize F1 on the test set, where the positive case is bank
-- **Stage 2**: threshold chosen per marsh to maximize F1 on the test set, where the positive case is unhealthy.
+- **Stage 1**: threshold chosen per marsh to maximize F1 on the test set, where the positive class is bank
+- **Stage 2**: threshold chosen per marsh to maximize F1 on the test set, where the positive class is unhealthy.
 
 ---
 
@@ -272,6 +272,7 @@ That leaves only ~52 "units" to split across train/val/test, and two of them dom
 
 To see the details involved in evaluating a two-stage approach, we will show an example from one marsh, South River.
 
+```
 stage 1
 ========================
 Best Threshold: 0.790
@@ -282,6 +283,7 @@ Accuracy: 0.961
 Confusion Matrix:
 [[162   1]
  [  8  59]]
+```
 
 - unhealthy_recalled=26,healthy_recalled=33, nonbank_recalled=1
 - (unhealthy_recalled+healthy_recalled)/sum([1 if l in [1,2] else 0 for l in original_labels])=0.8805970149253731
@@ -291,7 +293,7 @@ Confusion Matrix:
 - recall_unhealthy = unhealthy_recalled / unhealthy_total  # 26/29 = 0.8966
 - recall_healthy = healthy_recalled / healthy_total        # 33/38 = 0.8684
 
-
+```
 stage 2 (trained with non_banks, non_bank error rate: .04)
 =========================
 Best Threshold: 0.510
@@ -302,19 +304,16 @@ Accuracy: 0.885
 Confusion Matrix:
 [[65  9]
  [ 3 27]]
- error .01
- ================
+ error .02 (percentage of non-banks classified as unhealthy)
+```
 
-===========================================================================
-TWO-STAGE PIPELINE METRICS: UNHEALTHY BANK DETECTION
-===========================================================================
+### TWO-STAGE PIPELINE METRICS: UNHEALTHY BANK DETECTION
 
+```
 🎯 PRIMARY METRICS (Unhealthy Bank Detection):
    Recall:    83.6%
    Precision: 79.8%
    F1 Score:  0.817
-
-📊 Overall 3-Class Accuracy: 92.1%
 
 📈 STAGE 1 - Bank Detection (N=230):
    Test composition: 163 non-banks, 67 banks
@@ -342,67 +341,14 @@ TWO-STAGE PIPELINE METRICS: UNHEALTHY BANK DETECTION
    Composition: 709 non-banks, 161 healthy, 130 unhealthy
    Images passed to Stage 2: 273.9
    Marsh health ratio: 49.8% (predicted unhealthy / total detected banks)
+```
 ===========================================================================
 
-
+```
 Quick Summary:
 Recall:    83.6%
 Precision: 79.8%
 F1 Score:  0.817
+```
 
-
-### C.1 [Marsh name]
-
-**Test set composition**
-
-| Class | Count |
-|-------|------:|
-| Non-banks | *[N]* |
-| Healthy banks | *[N]* |
-| Unhealthy banks | *[N]* |
-| **Total** | *[N]* |
-
-**Stage 1 — bank vs. non-bank**
-
-Operating threshold: *[X]* (F1-optimal on validation)
-
-|                     | Predicted non-bank | Predicted bank |
-|---------------------|:------------------:|:--------------:|
-| **Actual non-bank** |         *[N]*      |     *[N]*      |
-| **Actual bank**     |         *[N]*      |     *[N]*      |
-
-- Precision: *[X]* · Recall: *[X]* · F1: *[X]* · Accuracy: *[X]*
-- Of the tiles missed by Stage 1: *[N]* were unhealthy (lost to the cascade at this stage), *[N]* were healthy.
-- Of the tiles caught by Stage 1: *[N]* were unhealthy, *[N]* were healthy.
-
-**Stage 2 — healthy vs. unhealthy (with TTA)**
-
-Operating threshold: *[X]*
-
-|                      | Predicted healthy | Predicted unhealthy |
-|----------------------|:-----------------:|:-------------------:|
-| **Actual healthy**   |       *[N]*       |        *[N]*        |
-| **Actual unhealthy** |       *[N]*       |        *[N]*        |
-
-- Precision: *[X]* · Recall: *[X]* · F1: *[X]* · Accuracy: *[X]*
-- Stage 2 FPR on non-banks (measured on held-out ballast, N=*[N]*): *[X]*
-
-**Cascade — end-to-end unhealthy detection**
-
-- Recall: *[X]*
-- Precision: *[X]*
-- F1: *[X]*
-
-**Where unhealthy banks were lost**
-
-| Stage    | Started | Lost | Miss rate | Passed |
-|----------|--------:|-----:|----------:|-------:|
-| Stage 1  |   *[N]* | *[N]* |   *[X]%*  |  *[N]* |
-| Stage 2  |   *[N]* | *[N]* |   *[X]%*  |  *[N]* |
-| **Total**|   *[N]* | *[N]* |   *[X]%*  |  *[N]* |
-
-*[Brief interpretation paragraph: where the losses concentrated for this marsh, whether the pattern suggests a Stage 1 or Stage 2 problem, any notable observations.]*
-
----
-
-*[Repeat C.1 template for each of the remaining 8 marshes.]*
+ach of the remaining 8 marshes.]*
