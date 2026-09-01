@@ -40,15 +40,15 @@ We applied the pipeline to nine salt marshes along the Massachusetts coast.
 >
 | Marsh | Flight date | Notes |
 |-------|----------|-------------|
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
-| Old Town Hill | 27apr21 | low tide |
+| Old Town Hill | 27 Aprilr 2021 | low tide |
+| Essex Bay | 27 April 2021 | low tide |
+| Peggotty Beach | 13 May 2021 | low tide |
+| North River | 13 May 2021 | low tide |
+| Red River | 14 May 2021 | low tide |
+| Barnstable | 2 June 2023 | low tide |
+| Wellfleet | 17 May 2021 | low tide |
+| Westport | 3 May 2021 | low tide |
+| South River | 15 June 2023 | low tide |
 
 
 ### 3.2 Imagery
