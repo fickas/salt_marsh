@@ -40,7 +40,7 @@ We applied the pipeline to nine salt marshes along the Massachusetts coast.
 >
 | Marsh | Flight date | Notes |
 |-------|----------|-------------|
-| Old Town Hill | 27 Aprilr 2021 | low tide |
+| Old Town Hill | 27 April 2021 | low tide |
 | Essex Bay | 27 April 2021 | low tide |
 | Peggotty Beach | 13 May 2021 | low tide |
 | North River | 13 May 2021 | low tide |
@@ -177,18 +177,18 @@ For each marsh, we report a stage-by-stage attrition table showing how many unhe
 
 Across the 9 marshes, the cascade caught between **[min]%** and **[max]%** of unhealthy bank tiles (median **[X]%**). Precision on unhealthy-bank detection ranged from **[min]** to **[max]** (median **[Y]**). A field ecologist working from the model's outputs would examine roughly **[Z]** tiles per marsh instead of the full drone survey, without missing significant erosion sites.
 
-| Marsh | Test tiles | Unhealthy recall | Unhealthy precision | F1 |
+| Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall F1 |
 |-------|-----------:|-----------------:|--------------------:|---:|
-| *Old Town Hill* | | | | |
-| *[Marsh 2]* | | | | |
-| *[Marsh 3]* | | | | |
-| *[Marsh 4]* | | | | |
-| *[Marsh 5]* | | | | |
-| *[Marsh 6]* | | | | |
-| *[Marsh 7]* | | | | |
-| *[Marsh 8]* | | | | |
-| *[Marsh 9]* | | | | |
-| **Median** | — | | | |
+| *Old Town Hill* | 0.984 | 0.947 | 0.965  | | | | |
+| *[Marsh 2]* | | | | | | | | | |
+| *[Marsh 3]* | | | | | | | | | |
+| *[Marsh 4]* | | | | | | | | | |
+| *[Marsh 5]* | | | | | | | | | |
+| *[Marsh 6]* | | | | | | | | | |
+| *[Marsh 7]* | | | | | | | | | |
+| *[Marsh 8]* | | | | | | | | | |
+| *[Marsh 9]* | | | | | | | | | |
+| **Median** | — | | | | | | | | |
 
 Test tiles counts all classes (healthy banks, unhealthy banks, non-banks). Per-marsh confusion matrices, thresholds, and attrition tables are in Appendix C.
 
