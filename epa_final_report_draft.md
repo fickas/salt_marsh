@@ -186,7 +186,7 @@ Results are broken out by stages with overall accuracy.
 | *Peggotty Beach* | .986 | .936 | .961 | .741 | .769 | .755 | .930|
 | *Westport* | .971 | .829 | .895 | .839 | .929 | .881 |  .900|
 | *Red River* | .900 | .931 | .915 | .844 | .871 | .857 | .900|
-| **Median** | — | | | | | | |
+| **Median** |.967 | .946 | .955 | .893 | .871 | .875 | .930 |
 
 ---
 stage 1 - tta
