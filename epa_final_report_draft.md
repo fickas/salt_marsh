@@ -53,9 +53,9 @@ We applied the pipeline to nine salt marshes along the Massachusetts coast.
 
 ### 3.2 Imagery
 
-*[TODO: describe sensor(s) used — RGB from onboard camera, DEM from photogrammetry or lidar, or both. Include ground sampling distance / tile resolution.]*
+Rasters were produced from an RGB  onboard camera and a DEM from photogrammetry. Ground Sampling Distance averaged 2.74 cm per pixel.
 
-Elevation data from each site was rendered as RGB using the `terrain` colormap so that a standard three-channel CNN could consume it. Per-tile robust normalization (2nd/98th percentile) was applied before colormapping to maximize visual contrast of local elevation features. Tiles with no dynamic range (constant elevation, e.g., open water) or with too few valid pixels were dropped at extraction time.
+Elevation data (DEM) from each site was rendered as RGB using the `terrain` colormap so that a standard three-channel CNN could consume it. Per-tile robust normalization (2nd/98th percentile) was applied before colormapping to maximize visual contrast of local elevation features. Tiles with no dynamic range (constant elevation, e.g., open water) or with too few valid pixels were dropped at extraction time.
 
 ### 3.3 Tiling
 
@@ -63,22 +63,18 @@ Each marsh raster was tiled into 299 × 299 pixel patches at 3 m × 3 m ground r
 
 ### 3.4 Labeling
 
-The source labels use a five-class scheme:
+The source labels use a five-class scheme: Healthy banks, Unhealthy banks, Ditches, Pond edges, Other. Ground-truth labeling was performed using a combination of field surveys and Photo Interpretation.
 
-*[TODO: enumerate the 5 raw classes. Best guess based on typical marsh work: healthy bank, unhealthy (eroding) bank, plus three non-bank categories such as vegetation, water/mudflat, and something else. Confirm the actual scheme.]*
-
-For modeling, these were collapsed into two binary problems:
+For modeling, the five classes were collapsed into two binary problems:
 
 - **Bank detection** (Stage 1): {bank, non-bank}, where "bank" combines the healthy and unhealthy bank classes.
 - **Bank condition** (Stage 2): {healthy, unhealthy}, evaluated on tiles that are actually banks.
-
-*[TODO: describe labeling protocol — who labeled, how disagreements were resolved, any QC pass.]*
 
 ---
 
 ## 4. Approach: Two-Stage Cascade
 
-The core modeling task — "which tiles show unhealthy bank?" — is naturally a three-class problem (healthy bank, unhealthy bank, everything else). We split it into two sequential binary problems instead:
+The core modeling task — "which tiles show an unhealthy bank?" — is naturally a three-class problem (healthy bank, unhealthy bank, everything else). We split it into two sequential binary problems instead:
 
 - **Stage 1** decides whether each tile shows a bank at all.
 - **Stage 2** decides whether tiles Stage 1 identified as banks are healthy or unhealthy.
@@ -105,11 +101,7 @@ Input images are 299 × 299 × 3.
 
 ### 5.2 Preprocessing
 
-*[TODO: confirm which stages use which preprocessing. From the training code:]*
-
-- **Stage 1** applies image sharpening before training and inference.
-- **Stage 2** does not use sharpening.
-- Both stages apply on-the-fly augmentation (approximately 15 augmentations per training image) and normalize pixel values to [-1, 1] as the final preprocessing step.
+The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a range of [1, -1] for Inception. 
 
 ### 5.3 Training
 
