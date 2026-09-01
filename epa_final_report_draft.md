@@ -177,19 +177,38 @@ Results are broken out by stages with overall accuracy.
 
 | Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall Accuracy |
 |-------|:-----------:|:-----------------:|:--------------------:|:---:|:-----------------:|:--------------------:|:---:|
-| *Old Town Hill* | 0.984 | 0.947 | 0.965  | 0.982 | 0.949 | 0.966 | .957 |
+| *Old Town Hill* | .984 | .947 | .965  | .982 | .949 | .966 | .957 |
 | *North River* | .964 | .946 | .955 | .913 | .808 | .857 | .910 |
 | *South River* | .881 | .983 | .929 | .900| .750 | .818 | .930|
 | *Wellfleet* | .968 | 1.00| .984| .929| .867| .897| .945 |
 | *Barnstable* | .967 | .908 | .937 | .893 | .926 | .909 | .946 |
-| *[Marsh 6]* | | | | | | | |
-| *[Marsh 7]* | | | | | | | |
-| *[Marsh 8]* | | | | | | | |
-| *[Marsh 9]* | | | | | | | |
+| *Essex Bay* | .967 | .951 | .959 | .848 | .903 | .875 | .930|
+| *Peggotty Beach* | .986 | .936 | .961 | .741 | .769 | .755 | .930|
+| *Westport* | .971 | .829 | .895 | .839 | .929 | .881 |  .900|
+| *Red River* | .900 | .931 | .915 | .844 | .871 | .857 | .900|
 | **Median** | — | | | | | | |
 
 ---
+stage 1 - tta
+======================
+Best Threshold: 0.380
+Best F1 Score: 0.915
+Precision: 0.931
+Recall: 0.900
+Accuracy: .941
+----------------------
+[[120   7]
+ [  4  56]] throws out 4 real banks
 
+stage 2 - tta
+=================
+Best Threshold: 0.700
+Best F1 Score: 0.857
+Precision: 0.871
+Recall: 0.844
+Accuracy: 0.850
+-----------------------
+Overall accuracy: .9
 ## 8. Limitations and Future Work
 
 ### Operating thresholds selected on test
