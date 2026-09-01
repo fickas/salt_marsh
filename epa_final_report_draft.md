@@ -189,26 +189,7 @@ Results are broken out by stages with overall accuracy.
 | **Median** |.967 | .946 | .955 | .893 | .871 | .875 | .930 |
 
 ---
-stage 1 - tta
-======================
-Best Threshold: 0.380
-Best F1 Score: 0.915
-Precision: 0.931
-Recall: 0.900
-Accuracy: .941
-----------------------
-[[120   7]
- [  4  56]] throws out 4 real banks
 
-stage 2 - tta
-=================
-Best Threshold: 0.700
-Best F1 Score: 0.857
-Precision: 0.871
-Recall: 0.844
-Accuracy: 0.850
------------------------
-Overall accuracy: .9
 ## 8. Limitations and Future Work
 
 ### Operating thresholds selected on test
@@ -226,9 +207,6 @@ The held-out ballast used to characterize Stage 2's behavior on non-banks is dra
 ### Temporal variation not tested
 Each marsh was flown once. Bank appearance varies with tide state, season, and post-storm conditions. The pipeline's robustness to these factors is not characterized.
 
-### Drone flight logistics
-The pipeline assumes drone imagery is available. Weather, permitting, and operator availability constrain flight frequency in practice.
-
 ---
 
 ## 9. Conclusion
@@ -242,19 +220,8 @@ The pipeline assumes drone imagery is available. Weather, permitting, and operat
 
 ---
 
-## Appendix A — Per-Marsh Data Split Counts
 
-| Marsh | Train (H / U / N) | Val (H / U / N) | Test (H / U / N) |
-|-------|-------------------|-----------------|------------------|
-| *[Marsh 1]* | | | |
-| *[Marsh 2]* | | | |
-| ... | | | |
-
-H = healthy banks, U = unhealthy banks, N = non-banks.
-
----
-
-## Appendix B — Spatial Splitting Algorithm
+## Appendix A — Spatial Splitting Algorithm
 
 The spatial-component-based splitter proceeds in four steps.
 
@@ -301,9 +268,88 @@ That leaves only ~52 "units" to split across train/val/test, and two of them dom
 
 ---
 
-## Appendix C — Per-Marsh Detailed Results
+## Appendix B — Detailed Results For One Marsh
 
-*Template for each marsh — reproduce for all 9.*
+To see the details involved in evaluating a two-stage approach, we will show an example from one marsh, South River.
+
+stage 1
+========================
+Best Threshold: 0.790
+Best F1 Score: 0.929
+Precision: 0.983
+Recall: 0.881
+Accuracy: 0.961
+Confusion Matrix:
+[[162   1]
+ [  8  59]]
+
+- unhealthy_recalled=26,healthy_recalled=33, nonbank_recalled=1
+- (unhealthy_recalled+healthy_recalled)/sum([1 if l in [1,2] else 0 for l in original_labels])=0.8805970149253731
+- unhealthy_missed=3,healthy_missed=5
+- unhealthy_total = unhealthy_recalled + unhealthy_missed  # 26 + 3 = 29
+- healthy_total = healthy_recalled + healthy_missed        # 33 + 5 = 38
+- recall_unhealthy = unhealthy_recalled / unhealthy_total  # 26/29 = 0.8966
+- recall_healthy = healthy_recalled / healthy_total        # 33/38 = 0.8684
+
+
+stage 2 (trained with non_banks, non_bank error rate: .04)
+=========================
+Best Threshold: 0.510
+Best F1 Score: 0.818
+Precision: 0.750
+Recall: 0.900
+Accuracy: 0.885
+Confusion Matrix:
+[[65  9]
+ [ 3 27]]
+ error .01
+ ================
+
+===========================================================================
+TWO-STAGE PIPELINE METRICS: UNHEALTHY BANK DETECTION
+===========================================================================
+
+🎯 PRIMARY METRICS (Unhealthy Bank Detection):
+   Recall:    83.6%
+   Precision: 79.8%
+   F1 Score:  0.817
+
+📊 Overall 3-Class Accuracy: 92.1%
+
+📈 STAGE 1 - Bank Detection (N=230):
+   Test composition: 163 non-banks, 67 banks
+   Bank recall:         0.896
+   Non-bank FPR:        0.018
+   Non-bank specificity: 0.982
+
+📈 STAGE 2 - Unhealthy Classification (N=104):
+   Test composition: 74 not-unhealthy (healthy+non-banks), 30 unhealthy
+   Unhealthy recall:       0.933
+   Not-unhealthy FPR:      0.189
+   Non-bank error rate:    0.020 (empirically tested)
+
+⚠️  ERROR ANALYSIS (Scaled to 1000 images):
+   True unhealthy banks:       130.4
+   Successfully detected:      109.0 (83.6%)
+   Lost at Stage 1:            13.6 (10.4%)
+   Lost at Stage 2:            7.8 (6.0%)
+
+   Total predicted as unhealthy: 136.5
+   FP from healthy banks:        27.3 (99.1% of FP)
+   FP from non-banks:            0.3 (0.9% of FP)
+
+🚀 DEPLOYMENT SIMULATION (1000 images):
+   Composition: 709 non-banks, 161 healthy, 130 unhealthy
+   Images passed to Stage 2: 273.9
+   Marsh health ratio: 49.8% (predicted unhealthy / total detected banks)
+===========================================================================
+
+
+Quick Summary:
+Recall:    83.6%
+Precision: 79.8%
+F1 Score:  0.817
+
 
 ### C.1 [Marsh name]
 
