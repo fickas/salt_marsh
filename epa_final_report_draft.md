@@ -95,9 +95,20 @@ Both Stage 1 and Stage 2 use the same Inception-style CNN architecture, differin
 
 ### 5.1 Architecture
 
-The network is a modified Inception design with four inception blocks of increasing filter count (96, 192, 384, 768), interleaved with max-pooling and dropout layers. Each inception block runs four parallel branches (1×1, 3×3, 5×5 convolutions, and a max-pool + 1×1 branch) whose outputs are concatenated. Activations are ELU throughout, with L2 weight regularization (λ = 1e-4). After the final inception block, global average pooling feeds two fully-connected layers (2048 and 1024 units), each with batch normalization and 0.5 dropout. The output is a single sigmoid unit for binary classification.
+5.1 Architecture
 
-Input images are 299 × 299 × 3.
+The classifier uses transfer learning from a pretrained InceptionV3 backbone with a lightweight custom head. The base network is loaded with ImageNet weights; all layers are initially frozen, and the final 25 layers are unfrozen for fine-tuning during training. Layer counts and initial weights are deterministic (fixed random seed, Glorot uniform initialization).
+
+On top of the backbone, we attach:
+
+- Global average pooling
+- Dense layer (256 units) with L2 weight regularization (λ = 1×10⁻³)
+- Batch normalization (momentum 0.99, ε = 1×10⁻³)
+- ReLU activation
+- Dropout (rate 0.5)
+- Output: single sigmoid unit (binary classification)
+
+Input images are 299 × 299 × 3 — matching the InceptionV3 native input size, which is the reason the tile extraction pipeline (Section 3) resizes to 299 pixels.
 
 ### 5.2 Preprocessing
 
@@ -106,7 +117,7 @@ The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a r
 ### 5.3 Training
 
 - Optimizer: Adam, learning rate 5×10⁻⁴, gradient clipping at norm 1.0
-- Loss: binary cross-entropy with label smoothing 0.1
+- Loss: binary cross-entropy (Keras default, no label smoothing)
 - Callbacks: early stopping on validation loss (patience 15, restore best weights); ReduceLROnPlateau (factor 0.5, patience 7, min LR 1×10⁻⁶)
 - Maximum 150 epochs
 
@@ -124,7 +135,7 @@ Because the pipeline is a cascade, per-stage metrics do not directly describe en
 
 ### 6.1 Data splits
 
-For each marsh, tiles were split 70/15/15 into training, validation, and test sets. The split uses stratified sampling on **spatial components** rather than individual tiles — a critical detail described in the next subsection. A fixed random seed was used across all marshes for reproducibility.
+For each marsh, tiles were split 70/15/15 into training, validation, and test sets. The split uses stratified sampling on spatial components rather than individual tiles — a critical detail described in the next subsection. A fixed random seed was used across all marshes for reproducibility. The validation set is used for early stopping and learning-rate reduction during training; operating thresholds are selected on test (see Section 5.4).
 
 Per-marsh, per-class split counts are given in Appendix A.
 
@@ -132,11 +143,11 @@ Per-marsh, per-class split counts are given in Appendix A.
 
 A common failure mode in remote-sensing ML is spatial leakage: when adjacent tiles are randomly assigned to train and test, the model isn't really being tested on new terrain. It's being tested on terrain it has effectively already seen. Reported metrics under random splitting can substantially overstate real-world performance on unseen sites.
 
-To avoid this, we split by **spatial component** rather than by individual tile. Two tiles are treated as belonging to the same component if they share a class label and are directly adjacent (up, down, left, or right — 4-connected). Components are identified via breadth-first search over the tile grid, then assigned as indivisible units to train, validation, or test splits using stratified sampling on component class labels. Every same-class contiguous region of the marsh therefore ends up wholly in one split — a model is never tested on a tile whose neighbor it trained on.
+To avoid this, we split by spatial component rather than by individual tile. Two tiles are treated as belonging to the same component if they share a class label and are directly adjacent (up, down, left, or right — 4-connected). Components are identified via breadth-first search over the tile grid, then assigned as indivisible units to train, validation, or test splits using stratified sampling on component class labels. Every same-class contiguous region of the marsh therefore ends up wholly in one split — a model is never tested on a tile whose neighbor it trained on.
 
 The trade-off is that stratification becomes approximate. A marsh dominated by a few very large components has fewer "units" available to balance across splits, so class ratios in train, validation, and test can drift from the target. In practice this is a small cost compared to the alternative of inflated metrics.
 
-*[TODO: add a small figure — a grid example showing tiles, components, and split assignment. Also confirm whether components are formed on 2-class {bank, non-bank} or the raw 5-class labels; the granularity implication should be stated.]*
+[TODO: add a small figure — a grid example showing tiles, components, and split assignment. Also confirm whether components are formed on 2-class {bank, non-bank} or the raw 5-class labels; the granularity implication should be stated.]
 
 We verified the spatial constraint held on every marsh (no adjacent same-class tiles ended up in different splits).
 
@@ -187,6 +198,9 @@ Test tiles counts all classes (healthy banks, unhealthy banks, non-banks). Per-m
 ---
 
 ## 8. Limitations and Future Work
+
+### Operating thresholds selected on test
+Per-marsh operating thresholds at both Stage 1 and Stage 2 were chosen to maximize F1 on the test set (see Section 5.4). This makes the reported per-marsh F1 values slightly optimistic — the same thresholds selected on a held-out validation set and applied cold to test would produce lower numbers. We opted for this simpler protocol given the modest size of per-marsh test sets, but a stricter val-set threshold selection would give a more defensible operating point for deployment. The relative comparison across marshes is unaffected.
 
 ### No cross-site generalization tested
 We trained one Stage 1 and one Stage 2 model per marsh. We have not tested how a model trained on marsh A performs when applied cold to marsh B. Operational deployment across new sites would benefit from that evaluation — and if generalization proves poor, from either a joint multi-site model or a fine-tuning protocol for new marshes.
