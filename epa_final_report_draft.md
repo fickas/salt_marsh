@@ -143,6 +143,7 @@ The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a r
 The proposal committed to reducing the hand-labeling burden through transfer learning and self-supervised learning, aiming to reduce the number of images per site from thousands to hundreds. The transfer-learning aspect was realized directly: our use of a pretrained InceptionV3 backbone (Section 5.1) substantially reduces the per-site training data required compared to training a network from scratch, and is the mature form of the technique the proposal envisioned.
 
 We did not implement an active-learning loop or self-supervised pre-training. In practice, an undergraduate labeler working from tiled imagery in QGIS could complete a marsh in a manageable timeframe, with expert QC review of the assigned labels. We did not run a controlled experiment to quantify labeling time savings against a hypothetical baseline, so we do not report a specific reduction figure.
+
 ---
 
 ## 6. Evaluation Framework
