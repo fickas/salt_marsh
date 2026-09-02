@@ -36,7 +36,8 @@ runs:
       shell: bash
       run: |
         docker run --rm -v "${{ github.workspace }}":/data pandoc/latex:latest \
-          pandoc "${{ inputs.markdown-file }}" -o "${{ inputs.output-file }}" \
+        pandoc /data/"${{ inputs.markdown-file }}" -o /data/"${{ inputs.output-file }}" \
+
           --pdf-engine=${{ inputs.pdf-engine }} -V geometry:margin=${{ inputs.margin }} --toc \
           --metadata title="${{ inputs.title }}"
         echo "pdf-path=${{ inputs.output-file }}" >> $GITHUB_OUTPUT
