@@ -13,19 +13,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Convert epa_final_report_draft.md to PDF (pandoc in Docker)
-        run: |
-          echo "Running pandoc in a container to produce PDF..."
-          docker run --rm -v "${{ github.workspace }}":/data pandoc/latex:latest \
-            pandoc epa_final_report_draft.md -o epa_final_report_draft.pdf \
-            --pdf-engine=xelatex -V geometry:margin=1in --toc \
-            --metadata title="Detecting Eroding Salt Marsh Banks"
-
-      - name: Upload PDF as workflow artifact
-        uses: actions/upload-artifact@v4
+      - name: Convert Markdown to PDF
+        uses: ./ # Uses the action from this repo
         with:
-          name: epa_final_report_pdf
-          path: epa_final_report_draft.pdf
+          markdown-file: epa_final_report_draft.md
+          output-file: epa_final_report_draft.pdf
+          title: Detecting Eroding Salt Marsh Banks
 
       - name: Commit PDF back to repository
         env:
