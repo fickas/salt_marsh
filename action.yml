@@ -1,0 +1,48 @@
+name: Convert Markdown to PDF
+description: Convert a Markdown file to PDF using Pandoc
+
+inputs:
+  markdown-file:
+    description: Path to the Markdown file to convert
+    required: true
+    default: epa_final_report_draft.md
+  output-file:
+    description: Path where the PDF should be saved
+    required: true
+    default: epa_final_report_draft.pdf
+  pdf-engine:
+    description: PDF engine to use (xelatex, pdflatex, etc)
+    required: false
+    default: xelatex
+  margin:
+    description: Page margin setting
+    required: false
+    default: 1in
+  title:
+    description: Document title
+    required: false
+    default: Detecting Eroding Salt Marsh Banks
+
+outputs:
+  pdf-path:
+    description: Path to the generated PDF file
+    value: ${{ steps.convert.outputs.pdf-path }}
+
+runs:
+  using: composite
+  steps:
+    - name: Convert Markdown to PDF
+      id: convert
+      shell: bash
+      run: |
+        docker run --rm -v "${{ github.workspace }}":/data pandoc/latex:latest \
+          pandoc "${{ inputs.markdown-file }}" -o "${{ inputs.output-file }}" \
+          --pdf-engine=${{ inputs.pdf-engine }} -V geometry:margin=${{ inputs.margin }} --toc \
+          --metadata title="${{ inputs.title }}"
+        echo "pdf-path=${{ inputs.output-file }}" >> $GITHUB_OUTPUT
+
+    - name: Upload PDF as artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: pdf-output
+        path: ${{ inputs.output-file }}
