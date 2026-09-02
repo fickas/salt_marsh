@@ -86,7 +86,7 @@ The cost of this design is that overall cascade behavior is not directly measure
 
 ### Per-marsh models
 
-We trained separate Stage 1 and Stage 2 models for each of the 9 marshes rather than a single model applied across sites. Marshes differ substantially in bank morphology, dominant vegetation, tide state at flight time, and lighting — a site-specific model captures these local characteristics without the difficulty of learning them jointly. The trade-off is that we have not demonstrated cross-site generalization; a model trained on one marsh applied cold to another is untested (see Limitations, Section 8).
+We trained separate Stage 1 and Stage 2 models for each of the 9 marshes rather than a single model applied across sites. Our hope was that we could build one model, using data from a variety of marshes for training, that could then be applied successfully to other marshes. We attempted this approach, but results were poor. We found that marshes differ substantially in bank morphology, dominant vegetation, tide state at flight time, and lighting — a site-specific model captures these local characteristics without the difficulty of learning them jointly. The trade-off is that we have not demonstrated cross-site generalization; a model trained on one marsh applied cold to another remains a goal (see Limitations, Section 8).
 
 ---
 
@@ -195,8 +195,8 @@ Results are broken out by stages with overall accuracy.
 ### Operating thresholds selected on test
 Per-marsh operating thresholds at both Stage 1 and Stage 2 were chosen to maximize F1 on the test set (see Section 5.4). This makes the reported per-marsh F1 values slightly optimistic — the same thresholds selected on a held-out validation set and applied cold to test would produce lower numbers. We opted for this simpler protocol given the modest size of per-marsh test sets, but a stricter val-set threshold selection would give a more defensible operating point for deployment. The relative comparison across marshes is unaffected.
 
-### No cross-site generalization tested
-We trained one Stage 1 and one Stage 2 model per marsh. We have not tested how a model trained on marsh A performs when applied cold to marsh B. Operational deployment across new sites would benefit from that evaluation — and if generalization proves poor, from either a joint multi-site model or a fine-tuning protocol for new marshes.
+### No cross-site generalization
+We trained one Stage 1 and one Stage 2 model per marsh. Our original goal was to train a single model, using data from a variety of marshes, that could then be applied to a new marsh without further training. We tested this approach, and the results were poor. Our experience from this effort leads us to believe that a single successful model would have to account for the variety of individual salt marsh morphology, differing flight conditions (time of day, clouds, GSD), differing tide conditions, and seasonal differences. While such a model may be possible, we believe it is elusive at the moment for UAS data.
 
 ### Stage 1 non-bank sample sizes
 For some marshes, the number of non-bank tiles in the test set is small, so the measured Stage 1 false-positive rate on non-banks (and by extension the cascade precision estimate) has wide uncertainty. Larger non-bank evaluation sets would tighten this.
