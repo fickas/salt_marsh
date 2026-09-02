@@ -1,0 +1,42 @@
+name: Convert Markdown to PDF
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Convert epa_final_report_draft.md to PDF (pandoc in Docker)
+        run: |
+          echo "Running pandoc in a container to produce PDF..."
+          docker run --rm -v "${{ github.workspace }}":/data pandoc/latex:latest \
+            pandoc epa_final_report_draft.md -o epa_final_report_draft.pdf \
+            --pdf-engine=xelatex -V geometry:margin=1in --toc \
+            --metadata title="Detecting Eroding Salt Marsh Banks"
+
+      - name: Upload PDF as workflow artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: epa_final_report_pdf
+          path: epa_final_report_draft.pdf
+
+      - name: Commit PDF back to repository
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if [ -f epa_final_report_draft.pdf ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add epa_final_report_draft.pdf
+            git commit -m "Generate PDF from epa_final_report_draft.md via GitHub Actions" || echo "No changes to commit"
+            git push
+          else
+            echo "PDF not found; skipping commit"
+          fi
