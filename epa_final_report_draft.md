@@ -379,13 +379,19 @@ Using Essex Bay as an example, we will present the key points of our approach.
 
 ### C.1 The Essex Bay marsh
 
-<p align="center">
+<p align="left">
   <img src="https://www.dropbox.com/scl/fi/7evcm05y1ymqbchdw38vm/Screenshot-2026-09-02-at-9.42.39-AM.png?rlkey=ug8r9akltn4bbti6jr8hphd15&raw=1" alt="Essex Bay salt marsh" width="400">
 </p>
 
 ### C.2 3mx3m Tiling
 
-<p align="center">
+<p align="left">
   <img src="https://www.dropbox.com/scl/fi/4pigut5pb4lisqd0q63a1/Screenshot-2026-09-02-at-9.51.59-AM.png?rlkey=sglw2h7542mbreeul7v0ceuhx&raw=1" alt="Essex Bay tiling" width="400">
+</p>
+
+### C.3 Stage 2
+
+<p align="left">
+  <img src="https://www.dropbox.com/scl/fi/fdqoh6utyazvv3mnwpknm/Screenshot-2026-09-02-at-10.01.48-AM.png?rlkey=xeiug7b13wqnn4q5903fxqlsm&raw=1" alt="Stage 2" width="400">
 </p>
 
