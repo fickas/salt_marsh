@@ -385,13 +385,25 @@ Using Essex Bay as an example, we will present the key points of our approach.
 
 ### C.2 3mx3m Tiling
 
+We experimented with different tile sizes and found that 3 m x 3 m gave the best results.
+
 <p align="left">
   <img src="https://www.dropbox.com/scl/fi/4pigut5pb4lisqd0q63a1/Screenshot-2026-09-02-at-9.51.59-AM.png?rlkey=sglw2h7542mbreeul7v0ceuhx&raw=1" alt="Essex Bay tiling" width="400">
 </p>
 
 ### C.3 Stage 2
 
+Note that Stage 1 is the same setup but with classes *bank* and *non-bank* replacing the *healthy bank* and *unhealthy bank* in the figure below. In essence, Stage 1 feeds what you see below on the left.
+
 <p align="left">
   <img src="https://www.dropbox.com/scl/fi/fdqoh6utyazvv3mnwpknm/Screenshot-2026-09-02-at-10.01.48-AM.png?rlkey=xeiug7b13wqnn4q5903fxqlsm&raw=1" alt="Stage 2" width="400">
+</p>
+
+### C.4 Production Stage
+
+Once the two-stage pipeline is established, we can apply it to the entire marsh.
+
+<p align="left">
+  <img src="https://www.dropbox.com/scl/fi/1oeyenb6n3uldrs8l0fjv/Screenshot-2026-09-02-at-10.11.28-AM.png?rlkey=sn9rl383b2ltjdh4vezwij24y&raw=1" alt="Pipeline in production" width="400">
 </p>
 
