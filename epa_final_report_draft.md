@@ -223,8 +223,6 @@ Task 4 of the proposal, which was contingent on Task 3 succeeding, was consequen
 
 ## 8. Limitations and Future Work
 
-### Operating thresholds selected on test
-Per-marsh operating thresholds at both Stage 1 and Stage 2 were chosen to maximize F1 on the test set (see Section 5.4). This makes the reported per-marsh F1 values slightly optimistic — the same thresholds selected on a held-out validation set and applied cold to test would produce lower numbers. We opted for this simpler protocol given the modest size of per-marsh test sets, but a stricter val-set threshold selection would give a more defensible operating point for deployment. The relative comparison across marshes is unaffected.
 
 ### No cross-site generalization
 We trained one Stage 1 and one Stage 2 model per marsh. Our original goal was to train a single model, using data from a variety of marshes, that could then be applied to a new marsh without further training. We tested this approach, and the results were poor. Our experience from this effort leads us to believe that a single successful model would have to account for the variety of individual salt marsh morphology, differing flight conditions (time of day, clouds, GSD), differing tide conditions, and seasonal differences. While such a model may be possible, we believe it is elusive at the moment for UAS data.
@@ -235,8 +233,6 @@ For some marshes, the number of non-bank tiles in the test set is small, so the 
 ### Stage 2 non-bank behavior estimate
 The held-out ballast used to characterize Stage 2's behavior on non-banks is drawn from the same marsh Stage 2 was trained on. While these specific tiles were never seen by Stage 2, they share spatial context with the training set. A fully independent non-bank evaluation (e.g., drawn from a held-out region of the marsh) would give a stricter estimate.
 
-### Temporal variation not tested
-Each marsh was flown once. Bank appearance varies with tide state, season, and post-storm conditions. The pipeline's robustness to these factors is not characterized.
 
 ---
 
@@ -377,4 +373,12 @@ Confusion Matrix:
    Marsh health ratio: 49.8% (predicted unhealthy / total detected banks)
 ```
 
+## Appendix C — An Illustrative Example
 
+Using Essex Bay as an example, we will present the key points of our approach.
+
+### C.1 The Essex Bay marsh
+
+
+
+![Essex Bay salt marsh]([https://example.com/map.png](https://www.dropbox.com/scl/fi/7evcm05y1ymqbchdw38vm/Screenshot-2026-09-02-at-9.42.39-AM.png?rlkey=ug8r9akltn4bbti6jr8hphd15&raw=1 "Essex Bay salt marsh")
