@@ -379,6 +379,4 @@ Using Essex Bay as an example, we will present the key points of our approach.
 
 ### C.1 The Essex Bay marsh
 
-
-
-![Essex Bay salt marsh]([https://example.com/map.png](https://www.dropbox.com/scl/fi/7evcm05y1ymqbchdw38vm/Screenshot-2026-09-02-at-9.42.39-AM.png?rlkey=ug8r9akltn4bbti6jr8hphd15&raw=1 "Essex Bay salt marsh")
+![Essex Bay salt marsh](https://www.dropbox.com/scl/fi/7evcm05y1ymqbchdw38vm/Screenshot-2026-09-02-at-9.42.39-AM.png?rlkey=ug8r9akltn4bbti6jr8hphd15&raw=1 "Essex Bay salt marsh")
