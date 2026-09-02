@@ -1,35 +1,46 @@
-# Detecting Unhealthy Salt Marsh Banks from Drone Imagery
+# Detecting Eroding Salt Marsh Banks from Drone Imagery
 
-**Final Report — EPA Salt Marsh Monitoring Project**
+### Final Report
 
-*[TODO: report author(s), affiliations, date, EPA program identifier, contract/grant number]*
+Prepared by Stephen F. Fickas, President, Hop Skip Technologies (HST), Eugene, OR. Prepared for Scott Jackson, Extension Professor, Department of Environmental Conservation, University of Massachusetts Amherst. Funding from EPA Wetlands Program Development Grants Project period March 2024 – September 2026.
 
 ---
 
 ## 1. Executive Summary
 
-Our goal was to explore the feasibility of classifying unhealthy banks in a salt marsh using drone imagery and AI image analysis techniques. If successful, one metric of marsh health, *the percentage of unhealthy banks across all banks in the marsh*, could be measured with some degree of automation.
+Salt marshes are among the most ecologically valuable and climate-vulnerable coastal ecosystems in the northeastern United States. Erosion of tidal channel banks is an early and measurable indicator of marsh degradation. Identifying eroding (unhealthy) banks at scale from remote-sensing imagery is a bottleneck for conservation practitioners: manual review of drone or aerial imagery does not keep pace with the volume of data now collected.
 
-> - How we did it (one sentence: two-stage cascade on drone imagery across 9 MA marshes)
+This project developed and evaluated a machine-learning pipeline that classifies salt-marsh imagery tiles as eroding bank, healthy bank, or non-bank. The pipeline uses a two-stage cascade — first distinguishing banks from non-banks, then classifying bank tiles as healthy or eroding — implemented as fine-tuned InceptionV3 convolutional networks. We applied the pipeline to nine Massachusetts salt marshes, training a separate model per site.
 
-Across 9 marshes, we found a minimum accuracy of .9 and a maximum accuracy of .957 with a median of .93. Section 7 provides a more detailed breakdown, per marsh, of recall, precision and F1 scores.
+Overall test-set accuracy ranged from 0.90 to 0.96 across the nine marshes, with a median of 0.93 — close to but slightly below the 95% accuracy target set in the original project proposal. Per-marsh recall and precision on the eroding-bank class specifically are reported in Section 7.
 
-> - What it enables operationally (field ecologists inspect a targeted subset instead of every drone tile)
+We additionally attempted to apply the same approach to publicly available MassGIS aerial photogrammetry imagery. The lower ground sampling distance of that data source proved insufficient to resolve the bank features the model relies on, and we abandoned that line of investigation. This is a finding in its own right: drone-scale imagery is a genuine requirement for this task at present, not a preference.
 
-> - What's next (cross-site generalization, operationalization)
+Cross-site generalization — training one model that works across marshes — remains open work and is a possible next step.
 
 ---
 
 ## 2. Introduction
 
-> **TODO:** Adapt the original project proposal wording. Key threads to develop:
->
-> - **Why salt marshes matter.** Coastal protection, carbon sequestration, nursery habitat, ecosystem services.
-> - **Why bank condition specifically.** Bank erosion is a leading indicator of marsh loss; unhealthy (eroding) banks predict where the marsh edge is receding and where restoration or intervention is most urgent. This is the paragraph that preempts the "who cares about unhealthy banks" objection — the audience needs to leave this section agreeing that identifying unhealthy banks is a management priority, not an academic curiosity.
-> - **Why current monitoring falls short.** Field surveys are labor-intensive and don't scale to the linear extent of coastline that managers need to cover. Manual review of drone imagery is possible but time-consuming when a single flight produces thousands of tiles.
-> - **What this project delivered.** A per-marsh classification pipeline that flags likely unhealthy bank tiles for targeted field inspection, tested across 9 Massachusetts coastal marshes.
->
-> Aim for one to two pages. The proposal wording likely already makes the ecological/management case — pull the strongest paragraph(s) from there and adapt.
+### 2.1 Salt marsh loss and the case for monitoring bank condition
+
+Salt marshes on the Massachusetts coastline provide storm-surge attenuation, carbon sequestration, nursery habitat for commercial fisheries, and water-quality filtration. They are also under sustained pressure from sea-level rise, altered tidal exchange, and coastal development. Marsh loss in the region is documented but heterogeneous — some marshes appear stable while others are actively retreating.
+
+Erosion of tidal channel banks is one of the more tractable indicators of marsh health. Unlike diffuse loss processes that are difficult to observe from imagery, an eroding bank leaves visible signatures: undercut edges, sediment slumping, exposed root mats, and loss of edge vegetation. Locating these signatures at scale would let managers direct restoration effort where the marsh edge is actively retreating, rather than triaging based on periodic ground surveys that cover only a fraction of the coastline.
+
+The obstacle is not that eroding banks are hard to identify — an experienced observer can spot them in a drone image within seconds. The obstacle is volume. A single drone flight over one marsh produces thousands of imagery tiles. Manually reviewing surveys across nine or more marshes on a routine monitoring cadence is not feasible with the staff typically available for this kind of work.
+
+### 2.2 Project context and scope
+
+This project builds on exploratory work between Hop Skip Technologies (HST) and the UMass Amherst salt-marsh research group. That earlier work demonstrated, on three sites, that a convolutional neural network could learn to identify eroding channel banks from drone imagery. The current project — funded through the EPA Wetlands Program Development Grants program and executed as a UMass-HST partnership — expanded that approach to a larger set of sites, hardened the evaluation protocol, and characterized where the approach works and where it does not.
+
+The stated deliverables were:
+
+- A machine-learning model for eroding-bank identification trained on data from at least five Massachusetts marshes, with a target of 95% classification accuracy.
+- A bank-erosion metric derived from the model's outputs, suitable for use by conservation practitioners.
+- An exploration of statewide applicability using publicly available MassGIS aerial photogrammetry imagery, and (if successful) a corresponding statewide erosion metric.
+
+We ultimately trained and evaluated the pipeline on nine marshes rather than five. The MassGIS aerial photogrammetry investigation is discussed in Section 7 and Section 8.
 
 ---
 
