@@ -404,6 +404,6 @@ Note that Stage 1 is the same setup but with classes *bank* and *non-bank* repla
 Once the two-stage pipeline is established, we can apply it to the entire marsh.
 
 <p align="left">
-  <img src="https://www.dropbox.com/scl/fi/1oeyenb6n3uldrs8l0fjv/Screenshot-2026-09-02-at-10.11.28-AM.png?rlkey=sn9rl383b2ltjdh4vezwij24y&raw=1" alt="Pipeline in production" width="400">
+  <img src="https://www.dropbox.com/scl/fi/1oeyenb6n3uldrs8l0fjv/Screenshot-2026-09-02-at-10.11.28-AM.png?rlkey=sn9rl383b2ltjdh4vezwij24y&raw=1" alt="Pipeline in production" width="600">
 </p>
 
