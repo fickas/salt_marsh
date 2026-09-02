@@ -138,6 +138,11 @@ The raw 3m x 3m tiles at 112x112 pixels were upscaled to 299x299 pixels with a r
 - **Stage 1**: threshold chosen per marsh to maximize F1 on the test set, where the positive class is bank
 - **Stage 2**: threshold chosen per marsh to maximize F1 on the test set, where the positive class is unhealthy.
 
+### 5.5 Labeling burden
+
+The proposal committed to reducing the hand-labeling burden through transfer learning and self-supervised learning, aiming to reduce the number of images per site from thousands to hundreds. The transfer-learning aspect was realized directly: our use of a pretrained InceptionV3 backbone (Section 5.1) substantially reduces the per-site training data required compared to training a network from scratch, and is the mature form of the technique the proposal envisioned.
+
+We did not implement an active-learning loop or self-supervised pre-training. In practice, an undergraduate labeler working from tiled imagery in QGIS could complete a marsh in a manageable timeframe, with expert QC review of the assigned labels. We did not run a controlled experiment to quantify labeling time savings against a hypothetical baseline, so we do not report a specific reduction figure.
 ---
 
 ## 6. Evaluation Framework
@@ -184,7 +189,11 @@ For an exemplar marsh, we report a stage-by-stage attrition table showing how ma
 
 ## 7. Results
 
-Results are broken out by stages with overall accuracy.
+### 7.1 Drone imagery — nine Massachusetts marshes
+
+Overall pipeline accuracy across the nine marshes ranged from 0.90 to 0.96, with a median of 0.93. This is close to but slightly below the 95% target set in the project proposal. "Overall accuracy" here counts a tile as correctly classified if both stages agree with ground truth: Stage 1 correctly identifies it as bank or non-bank, and (for bank tiles) Stage 2 correctly identifies it as healthy or eroding.
+
+Overall accuracy is a useful headline number because it maps directly to the proposal target, but it is not the only operationally meaningful metric.  The two-stage recall and precision columns below are the numbers a manager should look at when asking "will this system catch actual erosion?" and "will it flag things that aren't erosion?"
 
 | Marsh | Stage 1 Recall | Stage 1 Precision | Stage 1 F1 | Stage 2 Recall | Stage 2 Precision | Stage 2 F1 | Overall Accuracy |
 |-------|:-----------:|:-----------------:|:--------------------:|:---:|:-----------------:|:--------------------:|:---:|
@@ -198,6 +207,16 @@ Results are broken out by stages with overall accuracy.
 | *Westport* | .971 | .829 | .895 | .839 | .929 | .881 |  .900|
 | *Red River* | .900 | .931 | .915 | .844 | .871 | .857 | .900|
 | **Median** |.967 | .946 | .955 | .893 | .871 | .875 | .930 |
+
+### 7.2 MassGIS aerial photogrammetry
+
+The proposal also called for exploring whether the same modeling approach could be applied to publicly available MassGIS aerial photogrammetry imagery, which would enable statewide application without site-specific drone flights.
+
+We attempted this and found the ground sampling distance of the MassGIS imagery insufficient to resolve the visual features the model relies on. The bank characteristics that distinguish eroding from healthy — undercut edges, sediment slumping, fine-scale vegetation loss — occur at spatial scales of roughly 0.5–3 m, comfortably within the resolution of drone imagery but averaged away in coarser aerial data. Predictive performance in the MassGIS experiment was substantially worse than on drone imagery, sufficient to conclude that the approach as currently framed is not viable at that resolution.
+
+This is a finding rather than a failure: it establishes that drone-scale imagery is a genuine requirement for this task at present, not a preference. Future work using higher-resolution aerial platforms, or task reformulations that operate at coarser scales (e.g., detecting bank change over time rather than instantaneous condition), might change this conclusion.
+
+Task 4 of the proposal, which was contingent on Task 3 succeeding, was consequently not pursued.
 
 ---
 
