@@ -242,12 +242,15 @@ Each marsh was flown once. Bank appearance varies with tide state, season, and p
 
 ## 9. Conclusion
 
-*[TODO: written last. Placeholder points:]*
+Across the nine Massachusetts salt marshes tested, the pipeline developed in this project reliably identifies eroding channel bank tiles from drone imagery. Overall classification accuracy ranged from 0.90 to 0.96 with a median of 0.93 — close to the 95% target set in the proposal and, more importantly for practice, sufficient to let a field ecologist direct inspection effort to a small, targeted subset of each drone survey rather than reviewing every tile manually. The step from "we can see banks eroding in the imagery" to "we can find them at scale without staff-week manual review" is what the project was for.
 
-- The two-stage cascade produces useful unhealthy-bank flags on all 9 marshes tested.
-- Performance is consistent enough across sites that per-marsh training is a viable operational pattern, at least until cross-site generalization is characterized.
-- The spatial-splitting protocol we adopted gives conservative, defensible performance estimates that reflect real generalization to unseen bank sections rather than memorization of adjacent pixels.
-- Field ecologists can now allocate inspection effort to a targeted subset of drone tiles rather than reviewing full surveys manually.
+Two design decisions carry through the report and deserve emphasis. First, we split training and evaluation data by spatial component rather than by individual tile, so that no model was scored on terrain visually indistinguishable from what it had seen in training. The reported metrics reflect real generalization to unseen bank sections, not memorization of adjacent pixels — a standard drone-imagery ML pitfall we chose to design around. Second, we trained one model per marsh rather than the single cross-site model originally proposed. This gave stronger per-site performance but leaves cross-site generalization as the natural open question.
+
+Cross-site generalization is the most consequential next step. If a single model — or a base model with light per-site fine-tuning — can perform comparably across sites, routine monitoring becomes tractable without training from scratch for each new marsh, and expansion becomes primarily a matter of data collection rather than modeling. The current per-marsh results establish that the visual features exist and can be learned; whether they can be learned jointly is the question we recommend as the primary follow-on effort.
+
+The MassGIS aerial photogrammetry investigation established a boundary rather than a failure: at that ground sampling distance, the visual features distinguishing eroding from healthy banks are averaged away, and no amount of model refinement will recover them. Drone-scale imagery is a genuine requirement for this task at present. Higher-resolution statewide platforms, or task reformulations operating at coarser scales — such as detecting bank change over time rather than instantaneous condition — could revisit that boundary in future work.
+
+Software and models developed under this project are released under an open-source BSD-style license, as committed in the original proposal, and are available for adaptation by other groups working on similar problems in salt marsh and coastal ecosystems.
 
 ---
 
