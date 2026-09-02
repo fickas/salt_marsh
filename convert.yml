@@ -1,0 +1,22 @@
+name: Convert Markdown to PDF
+on:
+  workflow_dispatch:
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - id: convert
+        uses: ./
+        with:
+          markdown-file: epa_final_report_draft.md
+          output-file: epa_final_report_draft.pdf
+          pdf-engine: xelatex
+          margin: 1in
+          title: Detecting Eroding Salt Marsh Banks
+
+      - name: Show output path
+        run: echo "PDF generated at ${{ steps.convert.outputs.pdf-path }}"
