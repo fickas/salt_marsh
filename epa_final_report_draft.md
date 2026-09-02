@@ -163,8 +163,6 @@ To avoid this, we split by spatial component rather than by individual tile. Two
 
 The trade-off is that stratification becomes approximate. A marsh dominated by a few very large components has fewer "units" available to balance across splits, so class ratios in train, validation, and test can drift from the target. In practice, this is a small cost compared to the alternative of inflated metrics.
 
-[TODO: add a small figure — a grid example showing tiles, components, and split assignment. Also confirm whether components are formed on 2-class {bank, non-bank} or the raw 5-class labels; the granularity implication should be stated.]
-
 We verified the spatial constraint held on every marsh (no adjacent same-class tiles ended up in different splits).
 
 Full algorithmic details are in Appendix A.
@@ -215,14 +213,13 @@ The proposal also called for exploring whether the same modeling approach could 
 
 We attempted this and found the ground sampling distance of the MassGIS imagery insufficient to resolve the visual features the model relies on. The bank characteristics that distinguish eroding from healthy — undercut edges, sediment slumping, fine-scale vegetation loss — occur at spatial scales of roughly 0.5–3 m, comfortably within the resolution of drone imagery but averaged away in coarser aerial data. Predictive performance in the MassGIS experiment was substantially worse than on drone imagery, sufficient to conclude that the approach as currently framed is not viable at that resolution.
 
-This is a finding rather than a failure: it establishes that drone-scale imagery is a genuine requirement for this task at present, not a preference. Future work using higher-resolution aerial platforms, or task reformulations that operate at coarser scales (e.g., detecting bank change over time rather than instantaneous condition), might change this conclusion.
+This is a finding rather than a failure: it establishes that drone-scale imagery is a genuine requirement for this task at present, not a preference. Future work using higher-resolution aerial platforms might change this conclusion.
 
 Task 4 of the proposal, which was contingent on Task 3 succeeding, was consequently not pursued.
 
 ---
 
 ## 8. Limitations and Future Work
-
 
 ### No cross-site generalization
 We trained one Stage 1 and one Stage 2 model per marsh. Our original goal was to train a single model, using data from a variety of marshes, that could then be applied to a new marsh without further training. We tested this approach, and the results were poor. Our experience from this effort leads us to believe that a single successful model would have to account for the variety of individual salt marsh morphology, differing flight conditions (time of day, clouds, GSD), differing tide conditions, and seasonal differences. While such a model may be possible, we believe it is elusive at the moment for UAS data.
