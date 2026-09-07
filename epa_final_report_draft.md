@@ -321,7 +321,7 @@ Confusion Matrix:
 - recall_healthy = healthy_recalled / healthy_total        # 33/38 = 0.8684
 
 ```
-stage 2 (trained with non_banks, non_bank error rate: .04)
+stage 2 (trained with output of stage 1)
 =========================
 Best Threshold: 0.510
 Best F1 Score: 0.818
